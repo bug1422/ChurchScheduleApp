@@ -35,4 +35,12 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
+# React Native
+android/.gradle/
+android/app/build/
+ios/Pods/
+ios/build/
+*.log
+*.lock
+
 app-example
