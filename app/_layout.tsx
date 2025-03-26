@@ -25,6 +25,13 @@ const TabLayout = () => {
                 title: "Settings"
             }}
         />
+        <Tabs.Screen
+            name='searchPage'
+            options={{
+                headerShown: false,
+                title: "Search Page"
+            }}
+        />
     </Tabs>
   )
 }

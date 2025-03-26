@@ -44,3 +44,4 @@ ios/build/
 *.lock
 
 app-example
+mock_data/
