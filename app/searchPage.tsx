@@ -268,7 +268,7 @@ const SearchPage = () => {
     </SafeAreaProvider>
   );
 };
-
+//remember to stylize search option
 const styles = StyleSheet.create({
   searchBar: {
     height: 60,
