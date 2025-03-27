@@ -62,16 +62,13 @@ const ChurchItem = ({ item }: { item: ChurchDailyData }) => {
 
   const ChurchTimeline = () => {
     if (item.timeData === undefined) return <Text>No time found</Text>;
-
     let times = item.timeData.times;
     if (item.closestTimeIndex != 0)
-      times = item.timeData?.times
-        .slice(item.closestTimeIndex - 1)
-        .concat(item.timeData.times.slice(0));
+      times = item.timeData?.times.slice(item.closestTimeIndex);
 
     return times.map((v: ChurchTimeInfo, i: number) => {
       let color = "grey";
-      if (i === item.closestTimeIndex) color = "green";
+      if (i === 0) color = "green";
       else if (v.hour >= hour) {
         if (v.minute > minute) {
           color = "blue";
@@ -126,7 +123,8 @@ const SearchOption = ({
     <View style={styles.searchOptionContainer}>
       <Text style={styles.searchOptionLabel}>{children}</Text>
       <Picker
-        style={styles.searchOption}
+        style={styles.searchOptionPicker}
+        itemStyle={styles.searchOptionPickerItem}
         selectedValue={items[selectedIndex]}
         onValueChange={(value: any, idx: number) => {
           onChange(idx);
@@ -146,7 +144,6 @@ const SearchPage = () => {
   const [sorted, setSorted] = useState<ChurchDailyData[]>([]);
   const [dayIndex, setDayIndex] = useState<number>(day);
   const [hourIndex, setHourIndex] = useState<number>(hour);
-  const [minuteIndex, setMinuteIndex] = useState<number>(minute);
 
   const GetChurchesData = () => {
     const churchesDatas: ChurchWeeklyData[] = GetChurches().map(
@@ -192,7 +189,8 @@ const SearchPage = () => {
               : timeData.times.findIndex(
                   (v) =>
                     v.hour > hourIndex ||
-                    (v.hour == hourIndex && v.minute >= minuteIndex)
+                    v.hour == hourIndex ||
+                    (v.hour == hour && v.minute >= minute)
                 ),
           timeData: timeData,
         };
@@ -206,6 +204,9 @@ const SearchPage = () => {
   }, []);
   useEffect(() => {
     updateSorted();
+  }, [churchesDatas]);
+  useEffect(() => {
+    updateSorted();
   }, [text, dayIndex, hourIndex]);
 
   const onChangeSearchValue = (text: string) => {
@@ -214,10 +215,8 @@ const SearchPage = () => {
 
   const days = Object.keys(ChurchDay).filter((key) => isNaN(Number(key)));
   const hours = Array.from({ length: 24 }, (_, idx) => `${idx}:00`);
-  const minutes = Array.from({ length: 60 }, (_, idx) => `${idx}`);
   console.log(days);
   console.log(hours);
-  console.log(minutes);
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
@@ -229,7 +228,7 @@ const SearchPage = () => {
             value={text}
             onChangeText={onChangeSearchValue}
           />
-          <View>
+          <View style={{ display: "flex", flexDirection: "row" }}>
             <SearchOption
               items={days}
               selectedIndex={dayIndex}
@@ -244,18 +243,12 @@ const SearchPage = () => {
             >
               Hour
             </SearchOption>
-            <SearchOption
-              items={minutes}
-              selectedIndex={minuteIndex}
-              onChange={setMinuteIndex}
-            >
-              Minute
-            </SearchOption>
           </View>
         </View>
         {sorted.length != 0 ? (
           <FlatList
             data={sorted}
+            style={styles.itemContainer}
             renderItem={({ item }) => <ChurchItem item={item} />}
             keyExtractor={(item) => item.name}
           />
@@ -278,13 +271,19 @@ const styles = StyleSheet.create({
   },
   searchOptionContainer: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
+    marginHorizontal: 8,
   },
-  searchOptionLabel: {},
-  searchOption: {
-    flex: 1,
+  searchOptionLabel: {
+    fontWeight: 500,
   },
+  searchOptionPicker: {
+    backgroundColor: "transparent",
+    borderWidth: 0,
+    borderBottomWidth: 1,
+  },
+  searchOptionPickerItem: {},
   notFound: {
     marginTop: 24,
     fontSize: 18,
@@ -293,7 +292,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    paddingBottom: 120,
+  },
+  itemContainer: {
+    width: Dimensions.get("window").width,
+    overflowX: "hidden",
   },
   item: {
     display: "flex",
@@ -301,6 +303,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     marginVertical: 8,
     marginHorizontal: 16,
+    overflowX: "hidden",
   },
   itemImage: {
     width: 60,

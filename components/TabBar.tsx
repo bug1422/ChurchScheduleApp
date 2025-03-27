@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import React from "react";
 
@@ -102,19 +102,19 @@ const TabBar = ({
 const styles = StyleSheet.create({
   tabbar: {
     position: "absolute",
-    bottom: 25,
+    bottom: 0,
+    width: Dimensions.get("window").width,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     backgroundColor: "white",
-    marginHorizontal: 20,
     paddingVertical: 15,
-    borderRadius: 25,
+    paddingStart: 30,
+    borderWidth: 0,
+    borderTopWidth: 1,
+    borderTopStartRadius: 25,
+    borderTopEndRadius: 25,
     borderCurve: "continuous",
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 10 },
-    shadowRadius: 10,
-    shadowOpacity: 0.1,
   },
 
   tabbarItem: {
