@@ -5,12 +5,9 @@ import {
   StyleSheet,
   StatusBar,
   Image,
-  TextInput,
   Dimensions,
-  NativeSyntheticEvent,
-  TextInputFocusEventData,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Church,
   ChurchTime,
@@ -291,7 +288,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
   },
   itemContainer: {
     width: Dimensions.get("window").width,

@@ -5,12 +5,12 @@ import TabBar from '@/components/TabBar'
 const TabLayout = () => {
   return (
     <Tabs   
-        screenOptions={{ tabBarStyle: {backgroundColor: "transparent"} }}
         tabBar={props => <TabBar {...props} />}
     >
         <Tabs.Screen 
             name="index"
             options={{
+                headerShown: false,
                 title: "Home"
             }}
         />
